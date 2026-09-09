@@ -1,0 +1,40 @@
+[project]
+name = "qa-automation-portfolio"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Irina Shekhter", email = "103877820+irina-shekhter@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = []
+
+[project.scripts]
+qa-automation-portfolio = "qa_automation_portfolio:main"
+
+[build-system]
+requires = ["uv_build>=0.12.11,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "allure-pytest>=2.16.0",
+    "faker>=40.38.0",
+    "httpx>=0.28.1",
+    "pydantic>=2.13.5",
+    "pydantic-settings>=2.15.0",
+    "pytest>=9.1.1",
+    "pytest-rerunfailures>=16.6.1",
+    "pytest-xdist>=3.8.0",
+    "ruff>=0.16.6",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --strict-markers --tb=short"
+markers = [
+    "smoke: critical subset for fast feedback",
+    "regression: full regression suite",
+    "api: API-level tests",
+    "ui: UI-level tests",
+]
