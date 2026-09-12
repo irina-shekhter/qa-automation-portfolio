@@ -1,5 +1,3 @@
-from urllib import response
-
 import httpx
 
 PUBLIC_ENDPOINTS = [

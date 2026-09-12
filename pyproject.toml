@@ -38,3 +38,10 @@ markers = [
     "api: API-level tests",
     "ui: UI-level tests",
 ]
+
+[tool.ruff]
+line-length = 88
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
