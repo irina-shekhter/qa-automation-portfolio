@@ -1,16 +1,19 @@
 import httpx
 import pytest
 
+BASE_URL = "http://localhost:8080/api"
+
+
 
 @pytest.fixture(scope="session")
-def room_url() -> str:
-    return "http://localhost:3001/room/"
+def base_url() -> str:
+    return BASE_URL
 
 
 @pytest.fixture(scope="session")
-def http_client() -> httpx.Client:
+def http_client(base_url    ) -> httpx.Client:
     print("\n>>> opening client")
-    client = httpx.Client(timeout=10.0)
+    client = httpx.Client(base_url=base_url, timeout=10.0)
 
     yield client
 
@@ -18,11 +21,20 @@ def http_client() -> httpx.Client:
     client.close()
 
 
-@pytest.fixture
-def rooms_response(http_client: httpx.Client, room_url: str) -> httpx.Response:
-    return http_client.get(room_url)
-
-
 @pytest.fixture(scope="session")
-def message_url() -> str:
-    return "http://localhost:3006/message/"
+def auth_token(http_client:httpx.Client) -> str:
+    response = http_client.post("/auth/login", json={"username": "admin", "password": "password"})
+
+    assert response.status_code == 200, f"Login failde: {response.text}"
+
+    return response.json()["token"]
+
+
+@pytest.fixture
+def admin_client(base_url: str, auth_token : str) -> httpx.Client:
+    client = httpx.Client(base_url=base_url, timeout=10.0)
+    client.cookies.set("token", auth_token)
+
+    yield client
+
+    client.close()

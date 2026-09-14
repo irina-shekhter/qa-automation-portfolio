@@ -1,18 +1,16 @@
-from email.quoprimime import body_check
-
 import httpx
 import pytest
 
 PUBLIC_COLLECTION = [
-    ("http://localhost:3001/room/", "rooms"),
-    ("http://localhost:3006/message/", "messages"),
+    ("/room", "rooms"),
+    ("/message", "messages"),
 ]
 
 @pytest.mark.parametrize(("url", "collection_key"), PUBLIC_COLLECTION, ids=["room", "message"])
 def test_public_collection_returns_ok(
         http_client:httpx.Client, url: str, collection_key: str
 ):
-    response = httpx.get(url)
+    response = http_client.get(url)
 
     assert response.status_code == 200
 
@@ -21,7 +19,7 @@ def test_public_collection_returns_ok(
 def test_public_collection_returns_non_empty_list(
         http_client:httpx.Client, url: str, collection_key: str
 ):
-    response = httpx.get(url)
+    response = http_client.get(url)
 
     body = response.json()
 
