@@ -14,14 +14,14 @@ def probe(name: str, port: int) -> None:
     paths = [f"/{name}/", f"/{name}", "/"]
 
     print(f"\n--- {name} (port {port}) ---")
-
-    for path in paths:
-        url = f"http://localhost:{port}{path}"
-        try:
-            response = httpx.get(url, timeout=5.0)
-            print(f"  {response.status_code}  GET {path}")
-        except httpx.RequestError as error:
-            print(f"  ERROR GET {path}: {error}")
+    if __name__ == "__main__":
+        for path in paths:
+            url = f"http://localhost:{port}{path}"
+            try:
+                response = httpx.get(url, timeout=5.0)
+                print(f"  {response.status_code}  GET {path}")
+            except httpx.RequestError as error:
+                print(f"  ERROR GET {path}: {error}")
 
 
 for service_name, service_port in SERVICES.items():
