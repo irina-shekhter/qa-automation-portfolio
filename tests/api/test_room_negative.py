@@ -17,7 +17,7 @@ def test_invalid_room_id_returns_not_found(http_client: httpx.Client, room_id: s
     reason="RBP-001: returns 500 Internal Server Error instead of 404",
     strict=True,
 )
-@pytest.mark.parametrize("room_id", [999,0], ids=["unknown-id", "zero-id"])
+@pytest.mark.parametrize("room_id", [999, 0], ids=["unknown-id", "zero-id"])
 def test_unknown_room_returns_not_found(http_client: httpx.Client, room_id: int):
     response = http_client.get(f"/room/{room_id}")
 

@@ -2,8 +2,9 @@ import httpx
 
 
 def test_login_returns_token(http_client: httpx.Client):
-    response = http_client.get("/auth/login",
-                               json={"username": "admin", "password": "password"},
+    response = http_client.get(
+        "/auth/login",
+        json={"username": "admin", "password": "password"},
     )
 
     assert response.status_code == 200
