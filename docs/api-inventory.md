@@ -44,6 +44,16 @@ No `Set-Cookie` header is returned. The frontend stores the token
 itself and sends it as a cookie on subsequent requests:
 
 
+## Booking validation rules
+
+Discovered by probing `POST /api/booking`:
+
+| Field | Rule | Response when violated |
+|---|---|---|
+| `phone` | 11–21 characters | `400` — correct |
+| `bookingdates` | `checkout` must follow `checkin` | `500` — see RBP-003 |
+| `bookingdates` | must not overlap an existing booking for the same room | `500` — see RBP-002 |
+
 ## Endpoints
 
 | Method | Path | Auth | Notes |
@@ -52,7 +62,9 @@ itself and sends it as a cookie on subsequent requests:
 | GET | `/api/room/{id}` | no | 500 on unknown id — see RBP-001 |
 | GET | `/api/message` | no | returns `{"messages": [...]}` |
 | GET | `/api/branding` | no | single object |
-| GET | `/api/booking` | yes | 403 without token |
-| GET | `/api/booking?roomid={id}` | yes | filter by room |
+| GET | `/api/booking` | yes | **requires** `roomid` query param — returns 400 without it |
+| GET | `/api/booking?roomid={id}` | yes | returns `{"bookings": [...]}`; no `email`/`phone` in list items |
+| POST | `/api/booking` | yes | returns `200 []` — no body, no `bookingid` |
+| DELETE | `/api/booking/{id}` | yes | response code not yet verified |
 | POST | `/api/auth/login` | no | returns token |
 | GET | `/api/report` | ? | 400 without parameters — to investigate |
